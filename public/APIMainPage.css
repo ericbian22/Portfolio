@@ -1,0 +1,55 @@
+body{
+    height:100%
+}
+/* .container-fluid{
+    margin-top:50px;
+    height:80vh
+} */
+.API{
+    margin-top:15vh;
+ 
+}
+.card{
+    width:50%;
+    margin:auto;
+    padding:auto;
+}
+.card.Left{
+    margin-left:20vw;
+}
+.card.Right{
+    margin-right:20vw;
+}
+
+
+
+@media screen and(min-width:365px),( max-width: 680px){
+    .container{
+        margin-top: 50vh;
+    }
+  img{
+    width:150px;
+    height:100px;
+  }
+  }
+  
+  @media screen and(min-width:321px), (max-width: 364px){
+    .container{
+        margin-top: 60vh;
+    }
+  
+  }
+  
+  @media screen and (max-width: 320px){
+    .container{
+        margin-top: 90vh;
+    }
+    img{
+      width:100px;
+      height:80px;
+    }
+  }
+  
+  
+  
+  

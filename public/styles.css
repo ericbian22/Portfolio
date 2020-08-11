@@ -1,0 +1,23 @@
+
+
+body {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  color: #5a5a5a;
+}
+.container-fluid{
+  margin-top:50px;
+  height:80vh
+}
+.nav-link{
+
+  font-size: 1.1rem;
+}
+.navbar-brand{
+  margin-left:30px;
+  font-size: 30px;
+}
+.lastItem{
+  margin-right: 25px;
+}
+

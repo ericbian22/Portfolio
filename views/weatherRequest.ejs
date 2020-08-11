@@ -1,0 +1,28 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <title>API </title>
+  <link href="/weatherRequest.css" rel="stylesheet"/>
+<%-include("partials/header")-%>
+<div class="container-fluid">
+  <section>
+    <div class="h-100 row align-items-center">
+        <div class="col-sm-12">
+          <form action="/API/Weather" method="POST">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Enter a City Name</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="cityName">
+              </div>
+            <button type="submit" class="btn btn-primary ">Check</button>
+          </form>
+        </div>
+      </div>
+    </section>
+</div>
+
+
+
+<%- include("partials/footer")-%>

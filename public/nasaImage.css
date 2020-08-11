@@ -1,0 +1,11 @@
+.card{
+    margin:auto;
+    width:150%
+}
+.row{
+    padding-top:3rem;
+}
+.card-text{
+    font-size: 1.2rem;
+    text-align: center;
+}

@@ -1,0 +1,35 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <title>API </title>
+  <link href="/nasaImage.css" rel="stylesheet"/>
+<%-include("partials/header")-%>
+
+      <hr>
+    
+<div class="container-fluid">
+  <section>
+    <div class="h-100 row align-items-center">
+      <div class="col-sm-12">
+      <div class="card" style="width: 40rem;">
+        <img src=<%=img%> class="card-img-top" alt="..." width="500px" height="400px">
+        <div class="card-body">
+          
+          <p class="card-text">Today's NASA Image!</p>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+ 
+    </section>
+</div>
+
+
+
+<%- include("partials/footer")-%>

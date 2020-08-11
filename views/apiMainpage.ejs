@@ -1,0 +1,40 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>API </title>
+    <link href="APIMainPage.css" rel="stylesheet">
+   
+<%-include("partials/header")-%>
+<div class="container-fluid">
+  <section>
+    <div class="h-100 row align-items-center">
+        <div class="col-sm-6 API ">
+            <div class="card Left">
+              <div class="card-body">
+                  <img class="open-weather" src="/image/OpenWeather-Logo.jpg" width=225px , height=150px;/>
+                <h5 class="card-title">Open Weather API</h5>
+                <p class="card-text">Enter a city and you can check the current weather!</p>
+                <a href="/API/Weather" class="btn btn-primary">Get started</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 API ">
+            <div class="card Right">
+              <div class="card-body">
+                <img class="open-weather" src="/image/nasa_insignia_300.jpg" width=150px , height=150px;/>
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">Check out NASA's astronomy picture of the day!</p>
+                <a href="/API/Nasa-Image" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+</div>
+
+
+
+<%- include("partials/footer")-%>

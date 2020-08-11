@@ -1,0 +1,35 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <title>API </title>
+  <link href="/weatherReceived.css" rel="stylesheet"/>
+<%-include("partials/header")-%>
+
+      <hr>
+    
+<div class="container-fluid">
+  <section>
+    <div class="h-100 row align-items-center">
+      <div class="col-sm-12">
+      <div class="card" style="width: 18rem;">
+        <img src=<%=imgURL%>  class="card-img-top" alt="..." width="100px" height="225px">
+        <div class="card-body">
+          <h1>The weather is <%=describtion%></h1>
+          <p>The temperature in <%=cityname%> is <%=temp%> celcius</p>
+          <a class="btn btn-primary" href="/API/Weather" role="button">Check Another City</a>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+ 
+    </section>
+</div>
+
+
+
+<%- include("partials/footer")-%>
