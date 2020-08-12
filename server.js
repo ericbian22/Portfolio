@@ -67,6 +67,18 @@ app.route("/Calculator")
   res.render("calculator");
 });
 
+//////////////////////////////////////////////////////////////////login///////////////////////////////////////////////////////////////////
+
+app.route("/Login")
+.get((req,res)=>{
+  res.render("login");
+});
+
+app.route("/Register")
+.get((req,res)=>{
+  res.render("register");
+});
+
 
 
 

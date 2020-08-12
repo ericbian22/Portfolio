@@ -28,7 +28,9 @@ body {
     color: #5a5a5a;
     overflow-x: hidden;
   }
-  
+  .heading{
+    margin:auto;
+  }
   
   /* CUSTOMIZE THE CAROUSEL
   -------------------------------------------------- */
@@ -95,7 +97,7 @@ body {
     line-height: 1;
     letter-spacing: -.05rem;
   }
-  
+ 
   
   /* RESPONSIVE CSS
   -------------------------------------------------- */
