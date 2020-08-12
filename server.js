@@ -6,11 +6,87 @@ const https=require("https");
 const ejs=require("ejs");
 const request=require("request");
 const mongoose=require("mongoose");
+const _=require("lodash");
+const session = require('express-session');
+const passport=require("passport");
+const passportLocalMongoose=require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const findOrCreate = require('mongoose-findorcreate');
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 
+//////////////////////////////////////////////////////////////////Authentication setting////////////////////////////////////////////////////
+app.use(session({
+  secret:"The EB String",
+  resave:false,
+  saveUninitialized:false
+  }));
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  
+  
+  mongoose.connect(process.env.DBKEY, {useNewUrlParser: true, useUnifiedTopology: true});
+  mongoose.set("useCreateIndex",true);
+  
+  const userSchema=new mongoose.Schema({
+    email:String,
+    password:String,
+    username:String,
+    provider:String,
+    secret:String
+  });
+  
+  userSchema.plugin(passportLocalMongoose);
+  
+  userSchema.plugin(findOrCreate);
+  const User=mongoose.model("User",userSchema);
+  
+  passport.use(User.createStrategy());
+  
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+
+  passport.use(new GoogleStrategy({
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:3005/auth/google/Welcome",
+      userProfile: "https://www.googleapis.com/oauth2/v3/userinfo"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      User.findOrCreate({ username: profile.id}, {provider: "google", email:profile._json.email},function (err, user) {
+  
+        return cb(err, user);
+      });
+    }
+  ));
+  
+  passport.use(new FacebookStrategy({
+          clientID: process.env.FACEBOOK_APP_ID,
+          clientSecret: process.env.FACEBOOK_APP_SECRET,
+          callbackURL: "http://localhost:3005/auth/facebook/Welcome",
+          profileFields: ["id", "email"],
+          authType: 'reauthenticate'
+      },
+      function (accessToken, refreshToken, profile, cb) {
+          User.findOrCreate({ username: profile.id },{provider: "facebook",email: profile._json.email},function (err, user) {
+              return cb(err, user);
+            }
+          );
+      }
+  ));
+  
 //////////////////////////////////////////////////////////////////Main Home Page////////////////////////////////////////////////////////////
 app.route("/")
 .get((req,res)=>{
@@ -68,19 +144,90 @@ app.route("/Calculator")
 });
 
 //////////////////////////////////////////////////////////////////login///////////////////////////////////////////////////////////////////
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+  app.get('/auth/google/Welcome',
+    passport.authenticate('google', { failureRedirect: '/Login' }),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      res.redirect('/Welcome');
+    });
+
+    app.get("/auth/facebook",
+        passport.authenticate("facebook", {scope: ["email"]}));
+
+        app.get('/auth/facebook/Welcome',
+          passport.authenticate('facebook', { failureRedirect: '/Login' }),
+          function(req, res) {
+            // Successful authentication, redirect home.
+            res.redirect('/Welcome');
+          });
 
 app.route("/Login")
 .get((req,res)=>{
   res.render("login");
-});
+})
+.post(function(req,res){
+  const user=new User({
+    username:req.body.username,
+    password:req.body.password
+  });
+  req.login(user,function(err){
+    if(err){
+      res.redirect("/Login");
+    }else{
+      passport.authenticate("local")(req,res,function(){
+        res.redirect("/Welcome");
+      });
+    }
+  });
+  });
 
 app.route("/Register")
 .get((req,res)=>{
   res.render("register");
+}).post(function(req,res){
+  User.register({username:req.body.username},req.body.password,function(err,user){
+    if(err){
+      console.log(err);
+      res.redirect("/Register");
+    }else{
+      passport.authenticate("local")(req,res,function(){
+        User.updateOne({_id:user._id},{$set:{provider:"local",email:req.body.username}},function(err){
+          if(!err){
+              res.redirect("/Welcome");
+          }
+        });
+      });
+    }
+  });
+  });
+
+
+  app.route("/Welcome")
+.get(function(req,res){
+  if(req.isAuthenticated()){
+    User.findById(req.user.id,function(err,foundUser){
+        res.render("Welcome",{useremail:foundUser.email});
+    });
+
+  }else{
+    res.redirect("/Login");
+  }
+});
+
+app.get("/Logout",function(req,res){
+  req.session.destroy(function(e){
+    req.logout();
+    res.redirect('/');
+});
 });
 
 
 
+
+          
 
 
 
