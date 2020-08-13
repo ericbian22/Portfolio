@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>Blog </title>
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog.css" rel="stylesheet">
+ <%-include("partials/header")-%>
+<div class="container">
+ <h1>Compose</h1>
+
+  <form  action="/Compose" method="post">
+    <div class="form-group">
+    <label>Title</label>
+    <input class="form-control" type="text" name="postTitle" />
+    <label>Post</label>
+    <textarea class="form-control" type="textarea" name="postBody" rows="5" ></textarea>
+    </div>
+    <button class="btn btn-primary" type="submit" name="button" >Publish</button>
+  </form>
+</div>
+  <%- include("partials/footer")-%>

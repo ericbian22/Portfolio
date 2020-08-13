@@ -32,7 +32,8 @@ app.use(session({
   
   mongoose.connect(process.env.DBKEY, {useNewUrlParser: true, useUnifiedTopology: true});
   mongoose.set("useCreateIndex",true);
-  
+  mongoose.set('useFindAndModify', false);
+
   const userSchema=new mongoose.Schema({
     email:String,
     password:String,
@@ -303,15 +304,89 @@ app.get("/Logout",function(req,res){
 });
 });
 
+//////////////////////////////////////////////////////////////////////Blog/////////////////////////////////////////////////////////////////////
+const blogItemSchema=new mongoose.Schema({
+  title:String,
+  content:String
+});
+const BlogItem=mongoose.model("BlogItem",blogItemSchema);
+const blogSchema=new mongoose.Schema({
+  _id:String,
+  blogs:[blogItemSchema]
+});
+
+const Blog=mongoose.model("Blog",blogSchema);
+const item=BlogItem({
+title:"Blog",
+content:"Welcome to your personal blog!"
+});
+app.route("/Blog")
+.get((req,res)=>{
+  if(req.isAuthenticated()){
+  Blog.findOne({_id:req.user.id},function(err,foundBlog){    
+   if(!foundBlog){
+      const blog=new Blog({
+        _id:req.user.id,
+        blogs:[item]
+      });
+    blog.save();
+    res.redirect("/Blog");
+    }else if(foundBlog.blogs.length===0){
+      foundBlog.blogs.push(item);
+      foundBlog.save();
+      res.redirect("/Blog");
+    }else{
+      res.render("blog",{blogs:foundBlog.blogs});
+    }
+  });
+ 
+  
+  }else{
+  res.redirect("/Login");
+}
+});
+
+app.route("/Compose")
+.get((req,res)=>{
+  if(req.isAuthenticated()){
+   res.render("compose");
+  }else{
+    res.redirect("/Login");
+  }
+})
+.post((req,res)=>{
+  const useritem=new BlogItem({
+      title:req.body.postTitle,
+      content:req.body.postBody
+  });
+Blog.findOneAndUpdate({_id:req.user.id},{$push:{blogs:useritem}},function(err,foundBlog){
+      res.redirect("/Blog");
+});
+});
+
+app.get("/Blog/:postId",function(req,res){
+  if(req.isAuthenticated()){
+  var requestedPostId=req.params.postId;
+  Blog.findOne({_id:req.user.id},function(err,foundBlog){
+    var blog=foundBlog.blogs.id(requestedPostId);
+    res.render("post",{postTitle:blog.title,postContent:blog.content,postId:requestedPostId});
+  });
+}else{
+  res.redirect("/Login");
+}
+});
 
 
-
-          
-
-
-
-
-
+app.get("/Blog/:postId/Delete",function(req,res){
+  if(req.isAuthenticated()){
+    var requestedPostId=req.params.postId;
+  Blog.findOneAndUpdate({_id:req.user.id},{$pull:{blogs:{_id:requestedPostId}}},function(err,foundBlog){
+    res.redirect("/Blog");
+  });
+}else{
+  res.redirect("/Login");
+}
+});
 
 
 

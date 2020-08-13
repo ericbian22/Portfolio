@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>Blog </title>
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog.css" rel="stylesheet">
+ <%-include("partials/header")-%>
+ <div class="container">
+ <% for(var i=0; i<blogs.length;i++){ %>
+    <h1><%=blogs[i].title %></h1>
+    <p><%=blogs[i].content.substring(0,100)+" ..."%>
+    <a href="/Blog/<%=blogs[i]._id %>">Read More</a>
+    </p>
+
+<% }; %>
+<a class="btn btn-primary" href="/Compose" role="button">Compose</a>
+ </div>
+ 
+<%- include("partials/footer")-%>
