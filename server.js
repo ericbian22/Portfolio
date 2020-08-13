@@ -65,6 +65,30 @@ app.use(session({
       userProfile: "https://www.googleapis.com/oauth2/v3/userinfo"
     },
     function(accessToken, refreshToken, profile, cb) {
+      var data={
+        members:[{
+          email_address:profile._json.email,
+          status:"subscribed"
+        }]
+     
+     
+      };
+      var jsondata=JSON.stringify(data);
+      const url="https://us17.api.mailchimp.com/3.0/lists/"+process.env.MAILCHIMP_LIST;
+      const options={
+        hostname:"us17.api.mailchimp.com",
+        path:"/3.0/lists/"+process.env.MAILCHIMP_LIST,
+        method:"POST",
+        auth:"Eric1:"+process.env.MAILCHIMP_APIKEY
+      }
+     
+     
+     const request= https.request(options,function(response){
+     response.on("data",function(data){
+     });
+     });
+      request.write(jsondata);
+      request.end();
       User.findOrCreate({ username: profile.id}, {provider: "google", email:profile._json.email},function (err, user) {
   
         return cb(err, user);
@@ -80,6 +104,30 @@ app.use(session({
           authType: 'reauthenticate'
       },
       function (accessToken, refreshToken, profile, cb) {
+        var data={
+          members:[{
+            email_address:profile._json.email,
+            status:"subscribed"
+          }]
+       
+       
+        };
+        var jsondata=JSON.stringify(data);
+        const url="https://us17.api.mailchimp.com/3.0/lists/"+process.env.MAILCHIMP_LIST;
+        const options={
+          hostname:"us17.api.mailchimp.com",
+          path:"/3.0/lists/"+process.env.MAILCHIMP_LIST,
+          method:"POST",
+          auth:"Eric1:"+process.env.MAILCHIMP_APIKEY
+        }
+       
+       
+       const request= https.request(options,function(response){
+       response.on("data",function(data){
+       });
+       });
+        request.write(jsondata);
+        request.end();
           User.findOrCreate({ username: profile.id },{provider: "facebook",email: profile._json.email},function (err, user) {
               return cb(err, user);
             }
@@ -188,6 +236,37 @@ app.route("/Register")
 .get((req,res)=>{
   res.render("register");
 }).post(function(req,res){
+
+  
+
+ var data={
+   members:[{
+     email_address:req.body.username,
+     status:"subscribed"
+   }]
+
+
+ };
+ var jsondata=JSON.stringify(data);
+ const url="https://us17.api.mailchimp.com/3.0/lists/"+process.env.MAILCHIMP_LIST;
+ const options={
+   hostname:"us17.api.mailchimp.com",
+   path:"/3.0/lists/"+process.env.MAILCHIMP_LIST,
+   method:"POST",
+   auth:"Eric1:"+process.env.MAILCHIMP_APIKEY
+ }
+
+
+const request= https.request(options,function(response){
+response.on("data",function(data){
+});
+});
+ request.write(jsondata);
+ request.end();
+
+
+
+
   User.register({username:req.body.username},req.body.password,function(err,user){
     if(err){
       console.log(err);
